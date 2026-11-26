@@ -5,7 +5,10 @@
 // TODO P4: make a constant SYSTEM here: the rules for every answer (tone, length, format).
 //          Then send it as the first message, before the user's message, in ask().
 
-// ask("a question")  ->  the model's answer, as a string
+const SYSTEM = `모든 질문에 존댓말(해요체)로 답해주세요.
+답변은 줄바꿈 없이 한 문단, 세 문장 이내로 작성해주세요.
+목록, 제목, 굵은 글씨 등 마크다운 문법을 사용하지 말고 일반 텍스트로만 답해주세요.`;
+
 export async function ask(question) {
   const res = await fetch(
     `${process.env.LLM_BASE_URL}/chat/completions`,
@@ -18,6 +21,10 @@ export async function ask(question) {
       body: JSON.stringify({
         model: process.env.LLM_MODEL,
         messages: [
+          {
+            role: "system",
+            content: SYSTEM,
+          },
           {
             role: "user",
             content: question,
@@ -35,6 +42,7 @@ export async function ask(question) {
 
   return data.choices[0].message.content.trim();
 }
+
 
 // chat([{ role: "user", content: "..." }, { role: "assistant", content: "..." }, ...])
 //   ->  the model's next answer, as a string
