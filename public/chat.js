@@ -48,7 +48,7 @@ form.addEventListener("submit", async (event) => {
   const started = Date.now();
 
   // TODO P5 (1): add the visitor's message to history.
-
+  history.push({ role: "user", content: question });
   render();
   questionInput.value = "";
   sendButton.disabled = true; // one message at a time
@@ -60,7 +60,7 @@ form.addEventListener("submit", async (event) => {
     const answer = await chatServer(history);
 
     // TODO P5 (2): add the model's answer to history.
-
+    history.push({ role: "assistant", content: answer });
     statusEl.textContent = `Sent ${sent} message(s). Answered in ${((Date.now() - started) / 1000).toFixed(1)} s.`;
   } catch (err) {
     // The question got no answer: take it back out, so the list stays user, assistant, user, ...
